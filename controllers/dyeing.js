@@ -40,7 +40,7 @@ exports.getAllDyeingRecords = async (req, res) => {
     res.status(200).json(records);
   } catch (error) {
     console.error('Error fetching dyeing records:', error);
-    res.status(500).json({ message: 'Error fetching dyeing records' });
+    res.status(500).json({ message: 'Error fetching dyeing records',error });
   }
 };
 
