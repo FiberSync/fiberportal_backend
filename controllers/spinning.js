@@ -103,3 +103,48 @@ exports.deleteSpinning = async (req, res) => {
     res.status(500).json({ message: 'Error deleting spinning record', error });
   }
 };
+
+
+exports.updateSpinningFAApp = async (req, res) => {
+  try {
+    const { orderId, batchNumber, status, remarkMessage, role, qualityMetrics } = req.body;
+
+    if (!orderId || !batchNumber || !status || !role) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const spinningRecord = await Spinning.findOne({ orderId, batchNumber });
+
+    if (!spinningRecord) {
+      return res.status(404).json({ message: 'Spinning record not found' });
+    }
+
+    // Update status
+    spinningRecord.status = status;
+
+    // Add remark
+    spinningRecord.remarks.push({
+      message: remarkMessage,
+      updatedBy: role,
+      date: new Date()
+    });
+
+    
+    if (qualityMetrics) {
+      spinningRecord.qualityMetrics = {
+        ...spinningRecord.qualityMetrics,
+        ...qualityMetrics
+      };
+    }
+
+    spinningRecord.updatedAt = new Date();
+
+    await spinningRecord.save();
+
+    res.status(200).json({ message: 'Spinning record updated successfully' });
+  } catch (error) {
+    console.error('Error updating spinning record:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+

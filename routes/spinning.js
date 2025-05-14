@@ -17,4 +17,6 @@ router.put('/spinnings/update', spinningController.updateSpinning);
 // Delete a spinning record by ID
 router.delete('/spinnings/delete', spinningController.deleteSpinning);
 
+router.post('/updateSpinningFAapp', spinningController.updateSpinningFAApp);
+
 module.exports = router;
