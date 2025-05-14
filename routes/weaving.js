@@ -14,4 +14,6 @@ router.put('/update', weavingController.updateWeaving);
 // Delete a weaving record by batch number
 router.delete('/delete', weavingController.deleteWeaving);
 
+router.post('/updateWeavingFAapp', weavingController.updateWeavingRecordFA);
+
 module.exports = router;

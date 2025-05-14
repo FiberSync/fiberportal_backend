@@ -91,9 +91,67 @@ const deleteWeaving = async (req, res) => {
   }
 };
 
+const updateWeavingRecordFA = async (req, res) => {
+  try {
+    const {
+      orderId,
+      batchNumber,
+      status,
+      remarkMessage,
+      role,
+      qualityMetrics
+    } = req.body;
+
+    console.log('Incoming Weaving Update:', req.body);
+
+    // Find the weaving record
+    const record = await Weaving.findOne({ orderId, batchNumber });
+
+    if (!record) {
+      console.log('Weaving record not found');
+      return res.status(404).json({ message: 'Weaving record not found' });
+    }
+
+    // Create a new remark entry
+    const remarkEntry = {
+      message: remarkMessage,
+      updatedBy: role,
+      date: new Date()
+    };
+
+    // Apply updates
+    if (status) record.status = status;
+    if (remarkMessage && role) {
+      record.remarks.push(remarkEntry);
+    }
+
+    if (qualityMetrics) {
+      record.qualityMetrics = {
+        ...record.qualityMetrics,
+        ...qualityMetrics
+      };
+    }
+
+    record.updatedAt = new Date();
+
+    // Save and respond
+    const updatedRecord = await record.save();
+
+    res.status(200).json({
+      message: 'Weaving record updated successfully',
+      data: updatedRecord
+    });
+
+  } catch (error) {
+    console.error('Error updating weaving record:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   createWeaving,
   getAllWeavings,
   updateWeaving,
-  deleteWeaving
+  deleteWeaving,
+  updateWeavingRecordFA
 };
