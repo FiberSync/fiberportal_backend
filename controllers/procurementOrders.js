@@ -389,6 +389,40 @@ const getOrderCostData = async (req, res) => {
 };
 
 
+// POST /api/procurement-orders/field-agent-update
+const fieldAgentUpdateApp = async (req, res) => {
+  try {
+    const { orderNumber, agentName, status, remarks, date } = req.body;
+
+    const update = {
+      agentName,
+      status,
+      remarks,
+      date: date || new Date(),
+    };
+
+    const updatedOrder = await ProcurementOrder.findOneAndUpdate(
+      { orderNumber },
+      { $push: { fieldAgentUpdates: update } },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.status(200).json({
+      message: 'Field agent update added successfully',
+      order: updatedOrder,
+    });
+
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: 'Server error', error: e.message });
+  }
+};
+
+
 module.exports = {
   createOrder,
   getAllOrders,
@@ -401,5 +435,6 @@ module.exports = {
   updateShipmentDetails,
   updateStatus,
   getOrderCostData,
-  getSupplierPerformance
+  getSupplierPerformance,
+  fieldAgentUpdateApp
 };

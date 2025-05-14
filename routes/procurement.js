@@ -10,6 +10,7 @@ const {
     addProcurementAgentRemarks,
     addFieldAgentRemarks,
     updateShipmentDetails,
+    fieldAgentUpdateApp,
     updateStatus,
     getSupplierPerformance,
     getOrderCostData
@@ -41,6 +42,8 @@ router.put('/update/:id', updateOrder);
 
 // Delete an order by ID
 router.delete('/delete/:id', deleteOrder);
+
+router.post("/fieldAgentUpdateApp", fieldAgentUpdateApp);
 
 // // Update order status (Procurement or Field Agent)
 // router.put('/updateStatus/:id', updateOrderStatus);
