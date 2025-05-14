@@ -23,6 +23,6 @@ router.get('/company', dyeingController.getDyeingRecordsByCompany);
 // Route to get production summary (e.g., total dyed quantity and average production rate)
 router.get('/production-summary', dyeingController.getProductionSummary);
 
-router.get('/updateFAapp', dyeingController.updateDyeingRecordFA);
+router.post('/updateFAapp', dyeingController.updateDyeingRecordFA);
 
 module.exports = router;

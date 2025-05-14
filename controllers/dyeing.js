@@ -138,7 +138,6 @@ exports.updateDyeingRecordFA = async (req, res) => {
       role,
       qualityMetrics
     } = req.body;
-
     // Find the document by orderId and batchNumber
     const dyeingDoc = await Dyeing.findOne({ orderId, batchNumber });
 
