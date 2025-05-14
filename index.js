@@ -94,6 +94,9 @@ app.use('/api/dyeing', dyeingRouter);
 const procuremnetOrdersRouter = require('./routes/procurement');
 app.use('/api/procurementOrders', procuremnetOrdersRouter);
 
+const faUserRouter = require('./routes/fieldAgent');
+app.use('/api/faUser', faUserRouter);
+
 app.get('/', (req, res) => {
   res.send('FiberSync Backend is running!');
 });
