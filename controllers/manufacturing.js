@@ -133,11 +133,12 @@ exports.updateManufacturingRecordFA = async (req, res) => {
       role,
       qualityMetrics
     } = req.body;
-
+    console.log(req.body);
     // Find the manufacturing record
     const record = await Manufacturing.findOne({ orderId, batchNumber });
 
     if (!record) {
+      console.log('Manufacturing record not found');
       return res.status(404).json({ message: 'Manufacturing record not found' });
     }
 
@@ -153,7 +154,7 @@ exports.updateManufacturingRecordFA = async (req, res) => {
     record.remarks.push(remarkEntry);
     record.qualityMetrics = {
       ...record.qualityMetrics,
-      ...qualityMetrics
+      ...qualityMetrics,
     };
     record.updatedAt = new Date();
 
