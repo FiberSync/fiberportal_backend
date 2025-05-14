@@ -126,3 +126,52 @@ exports.getProductionSummary = async (req, res) => {
     res.status(500).json({ message: 'Error generating production summary' });
   }
 };
+
+
+exports.updateDyeingRecordFA = async (req, res) => {
+  try {
+    const {
+      orderId,
+      batchNumber,
+      status,
+      remarkMessage,
+      role,
+      qualityMetrics
+    } = req.body;
+
+    // Find the document by orderId and batchNumber
+    const dyeingDoc = await Dyeing.findOne({ orderId, batchNumber });
+
+    if (!dyeingDoc) {
+      return res.status(404).json({ message: 'Dyeing record not found' });
+    }
+
+    // Build the remark entry
+    const remarkEntry = {
+      message: remarkMessage,
+      updatedBy: role,
+      date: new Date()
+    };
+
+    // Update fields
+    dyeingDoc.status = status || dyeingDoc.status;
+    dyeingDoc.remarks.push(remarkEntry);
+    dyeingDoc.qualityMetrics = {
+      ...dyeingDoc.qualityMetrics,
+      ...qualityMetrics
+    };
+    dyeingDoc.updatedAt = new Date();
+
+    // Save the updated document
+    const updatedDyeing = await dyeingDoc.save();
+
+    res.status(200).json({
+      message: 'Dyeing record updated successfully',
+      data: updatedDyeing
+    });
+
+  } catch (error) {
+    console.error('Error updating dyeing record:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};

@@ -392,7 +392,7 @@ const getOrderCostData = async (req, res) => {
 // POST /api/procurement-orders/field-agent-update
 const fieldAgentUpdateApp = async (req, res) => {
   try {
-    const { orderNumber, agentName, status, remarks, date } = req.body;
+    const { orderNumber, status, remarks, date } = req.body;
 
     const update = {
       agentName,
