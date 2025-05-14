@@ -23,4 +23,6 @@ router.get('/company', manufacturingController.getManufacturingRecordsByCompany)
 // GET a production summary (e.g., number of units produced per batch)
 router.get('/summary', manufacturingController.getProductionSummary);
 
+router.post('/manufacturingFaUpdate', manufacturingController.updateManufacturingRecordFA);
+
 module.exports = router;

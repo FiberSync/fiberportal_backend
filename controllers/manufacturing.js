@@ -121,3 +121,52 @@ exports.getProductionSummary = async (req, res) => {
     res.status(500).json({ message: 'Error generating production summary' });
   }
 };
+
+
+exports.updateManufacturingRecordFA = async (req, res) => {
+  try {
+    const {
+      orderId,
+      batchNumber,
+      status,
+      remarkMessage,
+      role,
+      qualityMetrics
+    } = req.body;
+
+    // Find the manufacturing record
+    const record = await Manufacturing.findOne({ orderId, batchNumber });
+
+    if (!record) {
+      return res.status(404).json({ message: 'Manufacturing record not found' });
+    }
+
+    // Create a new remark entry
+    const remarkEntry = {
+      message: remarkMessage,
+      updatedBy: role,
+      date: new Date()
+    };
+
+    // Apply updates
+    if (status) record.status = status;
+    record.remarks.push(remarkEntry);
+    record.qualityMetrics = {
+      ...record.qualityMetrics,
+      ...qualityMetrics
+    };
+    record.updatedAt = new Date();
+
+    // Save and respond
+    const updatedRecord = await record.save();
+
+    res.status(200).json({
+      message: 'Manufacturing record updated successfully',
+      data: updatedRecord
+    });
+
+  } catch (error) {
+    console.error('Error updating manufacturing record:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
